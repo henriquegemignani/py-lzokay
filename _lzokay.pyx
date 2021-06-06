@@ -51,6 +51,9 @@ def decompress(data: bytes) -> bytes:
     code = c_decompress(data, len(data), b.data.as_uchars, len(b), actual_out_size)
     array.resize(b, actual_out_size)
 
+    if code == c_EResult.OutputOverrun:
+        code = c_decompress(data, len(data), b.data.as_uchars, len(b), actual_out_size)
+
     if code in result_mapping:
         raise result_mapping[code]()
 
