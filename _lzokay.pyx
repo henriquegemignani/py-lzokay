@@ -8,6 +8,35 @@ from lzokay_wrap cimport (
 )
 
 
+class LookbehindOverrun(Exception):
+    pass
+
+
+class OutputOverrun(Exception):
+    pass
+
+
+class InputOverrun(Exception):
+    pass
+
+
+class Error(Exception):
+    pass
+
+
+class InputNotConsumed(Exception):
+    pass
+
+
+result_mapping = {
+    c_EResult.LookbehindOverrun: LookbehindOverrun,
+    c_EResult.OutputOverrun: OutputOverrun,
+    c_EResult.InputOverrun: InputOverrun,
+    c_EResult.Error: Error,
+    c_EResult.InputNotConsumed: InputNotConsumed,
+}
+
+
 def compress_worst_size(s: int) -> int:
     return s + s // 16 + 64 + 3
 
@@ -22,8 +51,8 @@ def decompress(data: bytes) -> bytes:
     code = c_decompress(data, len(data), b.data.as_uchars, len(b), actual_out_size)
     array.resize(b, actual_out_size)
 
-    if code != c_EResult.Success:
-        raise ValueError("Error: {}".format(code))
+    if code in result_mapping:
+        raise result_mapping[code]()
 
     return b.tobytes()
 
@@ -38,8 +67,8 @@ def compress(data: bytes) -> bytes:
     code = c_compress(data, len(data), b.data.as_uchars, len(b), actual_out_size)
     array.resize(b, actual_out_size)
 
-    if code != c_EResult.Success:
-        raise ValueError("Error: {}".format(code))
+    if code in result_mapping:
+        raise result_mapping[code]()
 
     return b.tobytes()
 

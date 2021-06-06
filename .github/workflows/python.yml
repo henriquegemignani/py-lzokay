@@ -16,9 +16,14 @@ jobs:
         os:
           - 'macos-latest'
           - 'windows-latest'
+        python:
+          - '3.6'
+          - '3.7'
+          - '3.8'
+          - '3.9'
 
     runs-on: ${{ matrix.os }}
-    name: Wheel for ${{ matrix.os }}
+    name: Wheel for ${{ matrix.os }} ({{ matrix.python }})
 
     steps:
       - name: Checkout
@@ -30,7 +35,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: "3.6"
+          python-version: "{{ matrix.python }}"
      
       - name: Install Python packages
         run: python -m pip install --upgrade build pip pytest
@@ -40,7 +45,7 @@ jobs:
 
       - name: build sdist
         run: python -m build --sdist
-        if: ${{ matrix.os == 'macos-latest' }}
+        if: ${{ matrix.os == 'macos-latest' and matrix.python == '3.9' }}
       
       - name: Store the packages
         uses: actions/upload-artifact@v2
@@ -49,9 +54,18 @@ jobs:
           path: dist
 
   linux-build:
+    strategy:
+      fail-fast: false
+      matrix:
+        python:
+          - 'cp36-cp36m'
+          - 'cp37-cp37m'
+          - 'cp38-cp38'
+          - 'cp39-cp39'
+
     runs-on: ubuntu-latest
-    container: ghcr.io/pyca/cryptography-manylinux2014:x86_64
-    name: Wheel for Linux
+    container: quay.io/pypa/manylinux2014_x86_64
+    name: Wheel for Linux ({{ matrix.python }})
 
     steps:
       - name: Checkout
@@ -60,7 +74,7 @@ jobs:
           fetch-depth: 0
           submodules: 'recursive'
 
-      - run: /opt/python/cp36-cp36m/bin/python -m venv .venv
+      - run: /opt/python/{{ matrix.python }}/bin/python -m venv .venv
      
       - name: Install Python packages
         run: .venv/bin/python -m pip install --upgrade build auditwheel

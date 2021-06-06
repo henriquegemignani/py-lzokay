@@ -104,8 +104,6 @@ custom_include_paths = [
 ]
 
 extra_compile_args = [
-    '-DCYTHON_LIMITED_API=1',
-    '-DPY_LIMITED_API=1',
 ]
 
 if is_windows:
