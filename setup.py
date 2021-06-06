@@ -103,7 +103,10 @@ custom_include_paths = [
     cpp_code_dir,
 ]
 
-extra_compile_args = []
+extra_compile_args = [
+    '-DCYTHON_LIMITED_API=1',
+    '-DPY_LIMITED_API=1',
+]
 
 if is_windows:
     extra_compile_args.append("-DUNICODE")
