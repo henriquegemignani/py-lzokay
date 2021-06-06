@@ -121,7 +121,7 @@ ext_modules = [
         cmake_options={
             "dir": cpp_code_dir,
             "targets": {
-                "lzokay-c": "lib",
+                "lzokay": "lib",
             },
         },
         language='c++',

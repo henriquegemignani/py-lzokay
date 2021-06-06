@@ -128,5 +128,8 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+# Cython
+*.cpp
+
 # Project specific
 lzokay/version.py
