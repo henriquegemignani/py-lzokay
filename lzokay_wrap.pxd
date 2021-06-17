@@ -11,7 +11,7 @@ cdef extern from "lzokay.hpp" namespace "lzokay":
         InputNotConsumed,
 
     EResult decompress(const uint8_t* src, size_t src_size,
-                       uint8_t* dst, size_t dst_size, size_t& out_size)
+                       uint8_t* dst, size_t dst_size, size_t& out_size) nogil
 
     EResult compress(const uint8_t* src, size_t src_size,
-                     uint8_t* dst, size_t dst_size, size_t& out_size)
+                     uint8_t* dst, size_t dst_size, size_t& out_size) nogil
