@@ -29,7 +29,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
           submodules: 'recursive'
@@ -73,7 +73,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
           submodules: 'recursive'
@@ -122,6 +122,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
+      - name: Avoid issues with Git's solution for CVE-2022-24765 breaking setuptools-scm
+        run: git config --global --add safe.directory $(pwd)
 
       - name: Set up Python
         uses: actions/setup-python@v2
