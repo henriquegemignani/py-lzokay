@@ -17,7 +17,6 @@ jobs:
           - 'macos-latest'
           - 'windows-latest'
         python:
-          - '3.6'
           - '3.7'
           - '3.8'
           - '3.9'
@@ -60,7 +59,6 @@ jobs:
       fail-fast: false
       matrix:
         python:
-          - 'cp36-cp36m'
           - 'cp37-cp37m'
           - 'cp38-cp38'
           - 'cp39-cp39'
@@ -112,7 +110,6 @@ jobs:
           - {name: 'Windows', image: 'windows-latest', wheel: 'win_amd64'}
           - {name: 'Linux', image: 'ubuntu-latest', wheel: 'manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64'}
         python:
-          - {version: '3.6', wheel: 'cp36-cp36m'}
           - {version: '3.7', wheel: 'cp37-cp37m'}
           - {version: '3.8', wheel: 'cp38-cp38'}
           - {version: '3.9', wheel: 'cp39-cp39'}
