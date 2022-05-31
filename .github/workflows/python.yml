@@ -21,7 +21,7 @@ jobs:
           - '3.8'
           - '3.9'
           - '3.10'
-          - '3.11.0-beta - 3.11.0'
+          # - '3.11.0-beta - 3.11.0'
 
     runs-on: ${{ matrix.os }}
     name: Wheel for ${{ matrix.os }} (${{ matrix.python }})
@@ -63,7 +63,7 @@ jobs:
           - 'cp38-cp38'
           - 'cp39-cp39'
           - 'cp310-cp310'
-          - 'cp311-cp311'
+          # - 'cp311-cp311'
 
     runs-on: ubuntu-latest
     container: quay.io/pypa/manylinux2014_x86_64
@@ -78,7 +78,7 @@ jobs:
 
       - name: Avoid issues with Git's solution for CVE-2022-24765 breaking setuptools-scm
         run: git config --global --add safe.directory $(pwd)
-        
+
       - run: /opt/python/${{ matrix.python }}/bin/python -m venv .venv
      
       - name: Install Python packages
@@ -117,7 +117,7 @@ jobs:
           - {version: '3.8', wheel: 'cp38-cp38'}
           - {version: '3.9', wheel: 'cp39-cp39'}
           - {version: '3.10', wheel: 'cp310-cp310'}
-          - {version: '3.11.0-beta - 3.11.0', wheel: 'cp311-cp311'}
+          # - {version: '3.11.0-beta - 3.11.0', wheel: 'cp311-cp311'}
 
     steps:
       - name: Checkout
