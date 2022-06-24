@@ -1,5 +1,6 @@
 from cpython cimport array
 import array
+from libc.stdint cimport uint8_t
 
 from lzokay_wrap cimport (
     decompress as c_decompress,
@@ -37,23 +38,30 @@ result_mapping = {
 }
 
 
-def compress_worst_size(s: int) -> int:
+cpdef int compress_worst_size(s: int):
     return s + s // 16 + 64 + 3
 
 
 def decompress(data: bytes, expected_output_size: int = None) -> bytes:
-    if expected_output_size is None:
-        expected_output_size = len(data)
+    data_size = len(data)
+
+    cdef size_t curren_array_size = data_size
+    if expected_output_size is not None:
+        curren_array_size = expected_output_size
     
     cdef size_t actual_out_size = 0    
     cdef array.array b = array.array('B')
-    array.resize(b, expected_output_size)
+    array.resize(b, curren_array_size)
     
-    code = c_EResult.OutputOverrun
+    cdef c_EResult code = c_EResult.OutputOverrun
+    cdef const uint8_t* data_bytes = data
     while code == c_EResult.OutputOverrun:
-        code = c_decompress(data, len(data), b.data.as_uchars, len(b), actual_out_size)
+        with nogil:
+            code = c_decompress(data_bytes, data_size, b.data.as_uchars, curren_array_size, actual_out_size)
+
         if code == c_EResult.OutputOverrun:
-            array.resize(b, 2 * len(b))
+            curren_array_size *= 2
+            array.resize(b, curren_array_size)
     
     array.resize(b, actual_out_size)
 
@@ -64,13 +72,20 @@ def decompress(data: bytes, expected_output_size: int = None) -> bytes:
 
     
 def compress(data: bytes) -> bytes:
-    expected_out_size = compress_worst_size(len(data))
+    cdef const uint8_t* data_bytes = data
+    cdef size_t data_size = len(data)
+    cdef size_t expected_out_size = compress_worst_size(data_size)
 
-    cdef size_t actual_out_size = 0    
     cdef array.array b = array.array('B')
     array.resize(b, expected_out_size)
     
-    code = c_compress(data, len(data), b.data.as_uchars, len(b), actual_out_size)
+    # Results from c_compress
+    cdef c_EResult code
+    cdef size_t actual_out_size = 0
+
+    with nogil:
+        code = c_compress(data_bytes, data_size, b.data.as_uchars, expected_out_size, actual_out_size)
+    
     array.resize(b, actual_out_size)
 
     if code in result_mapping:
