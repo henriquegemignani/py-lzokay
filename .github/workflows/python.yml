@@ -78,7 +78,7 @@ jobs:
       - run: /opt/python/${{ matrix.python }}/bin/python -m venv .venv
      
       - name: Install Python packages
-        run: .venv/bin/python -m pip install --upgrade build pip auditwheel
+        run: .venv/bin/python -m pip install --upgrade build pip auditwheel setuptools
 
       - name: build
         run: .venv/bin/python -m build
