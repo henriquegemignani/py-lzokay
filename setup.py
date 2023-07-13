@@ -3,7 +3,6 @@ import platform
 import re
 import subprocess
 import sys
-from distutils.version import LooseVersion
 
 from Cython.Build import cythonize
 from Cython.Build.Dependencies import default_create_extension
@@ -34,8 +33,8 @@ class CMakeBuild(build_ext):
                                ", ".join(e.name for e in self.extensions))
 
         if is_windows:
-            cmake_version = LooseVersion(re.search(r'version\s*([\d.]+)', out.stdout).group(1))
-            if cmake_version < '3.1.0':
+            cmake_version = tuple(int(d) for d in re.search(r'version\s*([\d.]+)', out.stdout).group(1).split("."))
+            if cmake_version < (3, 26, 2):
                 raise RuntimeError("CMake >= 3.1.0 is required on Windows")
 
         super().run()
