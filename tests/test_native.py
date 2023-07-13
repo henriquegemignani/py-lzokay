@@ -1,12 +1,17 @@
+import lzokay
 import pytest
 
-import lzokay
 
-
-@pytest.mark.parametrize("data", [
-    b"Hello World",
-    b"Hello Worldello Worldello Worldello Worldello Worldello Worldello Worldello Worldello Worldello Worldello Worldello Worldello Worldello Worldello World",
-])
+@pytest.mark.parametrize(
+    "data",
+    [
+        b"Hello World",
+        (
+            b"Hello Worldello Worldello Worldello Worldello Worldello Worldello Worldello "
+            b"Worldello Worldello Worldello Worldello Worldello Worldello Worldello World"
+        ),
+    ],
+)
 def test_compress_and_decompress(data):
     compressed = lzokay.compress(data)
 
