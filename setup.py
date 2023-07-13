@@ -115,7 +115,7 @@ else:
 
 ext_modules = [
     CMakeExtension(
-        "_lzokay",
+        "lzokay._lzokay",
         [
             os.path.join(file_dir, "_lzokay.pyx"),
         ],
