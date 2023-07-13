@@ -19,7 +19,7 @@ file_dir = Path(__file__).parent.relative_to(Path().absolute())
 class CMakeExtension(Extension):
     def __init__(self, name, sources, cmake_options, *args, **kw):
         super().__init__(name, sources, *args, **kw)
-        cmake_options["dir"] = Path(cmake_options["dir"]).resolve()
+        cmake_options["dir"] = os.fspath(Path(cmake_options["dir"]).resolve())
         self.cmake_options = cmake_options
 
 
@@ -51,8 +51,8 @@ class CMakeBuild(build_ext):
         cmake_options = ext.cmake_options
         extdir = Path(self.get_ext_fullpath(ext.name)).parent.resolve()
         cmake_args = [
-            "-DCMAKE_ARCHIVE_OUTPUT_DIRECTORY=" + extdir,
-            "-DPYTHON_EXECUTABLE=" + sys.executable,
+            f"-DCMAKE_ARCHIVE_OUTPUT_DIRECTORY={extdir}",
+            f"-DPYTHON_EXECUTABLE={sys.executable}",
             "-DCMAKE_POSITION_INDEPENDENT_CODE=YES",
         ]
         library_output_dir = extdir
