@@ -115,7 +115,7 @@ else:
 
 ext_modules = [
     CMakeExtension(
-        "_lzokay",
+        "lzokay._lzokay",
         [
             os.path.join(file_dir, "_lzokay.pyx"),
         ],
@@ -154,9 +154,6 @@ for ext_module in cythonized_ext_modules:
 
 
 setup(
-    use_scm_version={
-        "local_scheme": "no-local-version",
-    },
     cmdclass={
         'build_ext': CMakeBuild,
     },
