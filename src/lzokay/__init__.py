@@ -1,5 +1,6 @@
+from lzokay._lzokay import compress, compress_worst_size, decompress
+
 from . import version
-from lzokay._lzokay import decompress, compress, compress_worst_size
 
 __all__ = [
     "decompress",
