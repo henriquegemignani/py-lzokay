@@ -132,4 +132,4 @@ dmypy.json
 *.cpp
 
 # Project specific
-lzokay/version.py
+src/lzokay/version.py
