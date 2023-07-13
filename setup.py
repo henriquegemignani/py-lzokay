@@ -1,9 +1,9 @@
 import os
+from pathlib import Path
 import platform
 import re
 import subprocess
 import sys
-from distutils.version import LooseVersion
 
 from Cython.Build import cythonize
 from Cython.Build.Dependencies import default_create_extension
@@ -13,7 +13,7 @@ from setuptools.extension import Extension
 
 is_windows = platform.system() == "Windows"
 
-file_dir = os.path.dirname(__file__)
+file_dir = Path(__file__).parent.relative_to(Path().absolute())
 
 
 class CMakeExtension(Extension):
@@ -34,8 +34,8 @@ class CMakeBuild(build_ext):
                                ", ".join(e.name for e in self.extensions))
 
         if is_windows:
-            cmake_version = LooseVersion(re.search(r'version\s*([\d.]+)', out.stdout).group(1))
-            if cmake_version < '3.1.0':
+            cmake_version = tuple(int(d) for d in re.search(r'version\s*([\d.]+)', out.stdout).group(1).split("."))
+            if cmake_version < (3, 26, 2):
                 raise RuntimeError("CMake >= 3.1.0 is required on Windows")
 
         super().run()
@@ -98,7 +98,7 @@ class CMakeBuild(build_ext):
         super().build_extension(ext)
 
 
-cpp_code_dir = os.path.join(os.path.dirname(__file__), "native", "lzokay")
+cpp_code_dir = os.fspath(file_dir.joinpath("native", "lzokay"))
 custom_include_paths = [
     cpp_code_dir,
 ]
@@ -117,7 +117,7 @@ ext_modules = [
     CMakeExtension(
         "lzokay._lzokay",
         [
-            os.path.join(file_dir, "_lzokay.pyx"),
+            os.fspath(file_dir.joinpath("_lzokay.pyx")),
         ],
         cmake_options={
             "dir": cpp_code_dir,
