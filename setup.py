@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 import platform
 import re
 import subprocess
@@ -12,7 +13,7 @@ from setuptools.extension import Extension
 
 is_windows = platform.system() == "Windows"
 
-file_dir = os.path.dirname(__file__)
+file_dir = Path(__file__).parent.relative_to(Path().absolute())
 
 
 class CMakeExtension(Extension):
@@ -97,7 +98,7 @@ class CMakeBuild(build_ext):
         super().build_extension(ext)
 
 
-cpp_code_dir = os.path.join(os.path.dirname(__file__), "native", "lzokay")
+cpp_code_dir = os.fspath(file_dir.joinpath("native", "lzokay"))
 custom_include_paths = [
     cpp_code_dir,
 ]
@@ -116,7 +117,7 @@ ext_modules = [
     CMakeExtension(
         "lzokay._lzokay",
         [
-            os.path.join(file_dir, "_lzokay.pyx"),
+            os.fspath(file_dir.joinpath("_lzokay.pyx")),
         ],
         cmake_options={
             "dir": cpp_code_dir,
