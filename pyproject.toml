@@ -45,6 +45,10 @@ write_to = "src/lzokay/version.py"
 
 [tool.pytest.ini_options]
 minversion = "6.0"
+filterwarnings = [
+    "error",
+]
+xfail_strict = true
 
 [tool.ruff]
 line-length = 120
