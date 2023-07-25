@@ -2,7 +2,7 @@ from libc.stdint cimport uint8_t
 
 
 cdef extern from "lzokay.hpp" namespace "lzokay":
-    cpdef enum class EResult(int):
+    cdef enum class EResult(int):
         LookbehindOverrun,
         OutputOverrun,
         InputOverrun,
