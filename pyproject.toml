@@ -36,6 +36,7 @@ Homepage = "https://github.com/henriquegemignani/py-lzokay"
 [project.optional-dependencies]
 test = [
     "pytest",
+    "pytest-cov",
 ]
 
 [tool.setuptools_scm]
