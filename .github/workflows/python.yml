@@ -30,7 +30,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     name: Wheel for ${{ matrix.os }} (${{ matrix.python }})
     # Do not run if macos-14 (arm) and unsupported python version
-    if: ${{ ( matrix.os != 'macos-14' ) || ( matrix.os == 'macos-14' && ( matrix.python != '3.8' && matrix.python != '3.9' ) ) }}
+    if: ( matrix.os != 'macos-14' ) || ( matrix.os == 'macos-14' && ( matrix.python != '3.8' && matrix.python != '3.9' ) )
 
     steps:
       - name: Checkout
