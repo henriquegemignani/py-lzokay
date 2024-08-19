@@ -1,5 +1,6 @@
-import lzokay
 import pytest
+
+import lzokay
 
 
 @pytest.mark.parametrize(
