@@ -20,7 +20,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Install cibuildwheel
-        run: pipx install cibuildwheel==2.16.5
+        run: pipx install cibuildwheel==2.20.0
       - id: set-matrix
         run: |
           MATRIX=$(
@@ -35,7 +35,7 @@ jobs:
               | jq -nRc '{"only": inputs, "os": "windows-latest"}'
             } | jq -sc
           )
-          echo "include=$MATRIX" >> $GITHUB_OUTPUT          
+          echo "include=$MATRIX" >> $GITHUB_OUTPUT
     env:
       CIBW_ARCHS_LINUX: x86_64
       CIBW_ARCHS_MACOS: arm64 x86_64
