@@ -69,4 +69,4 @@ select = [
 ]
 
 # Version to target for generated code.
-target-version = "py38"
+target-version = "py39"
