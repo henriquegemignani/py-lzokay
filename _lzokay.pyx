@@ -8,6 +8,8 @@ from lzokay_wrap cimport (
     EResult as c_EResult,
 )
 
+# cython: freethreading_compatible = True
+
 
 class LookbehindOverrun(Exception):
     pass
