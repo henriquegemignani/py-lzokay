@@ -1,5 +1,6 @@
 from libc.stdint cimport uint8_t
 
+# cython: freethreading_compatible = True
 
 cdef extern from "lzokay.hpp" namespace "lzokay":
     cdef enum class EResult(int):
