@@ -1,6 +1,6 @@
 use pyo3::prelude::*;
 use pyo3::exceptions::PyException;
-use lzokay;
+use ::lzokay as lzo;
 
 pyo3::create_exception!(lzokay, LzokayError, PyException, "Any kind of error.");
 
@@ -12,13 +12,13 @@ pyo3::create_exception!(lzokay, LzokayUnknownError, LzokayError, "Unknown error.
 pyo3::create_exception!(lzokay, InputNotConsumedError, LzokayError, "Decompression succeeded, but input buffer has remaining data.");
 
 // Helper function to convert lzokay::Error to appropriate Python exception
-fn lzokay_error_to_pyerr(error: lzokay::Error) -> PyErr {
+fn lzokay_error_to_pyerr(error: lzo::Error) -> PyErr {
     match error {
-        lzokay::Error::LookbehindOverrun => LookbehindOverrunError::new_err("lookbehind overrun"),
-        lzokay::Error::OutputOverrun => OutputOverrunError::new_err("output overrun"),
-        lzokay::Error::InputOverrun => InputOverrunError::new_err("input overrun"),
-        lzokay::Error::Error => LzokayUnknownError::new_err("unknown error"),
-        lzokay::Error::InputNotConsumed => InputNotConsumedError::new_err("input not consumed"),
+        lzo::Error::LookbehindOverrun => LookbehindOverrunError::new_err("lookbehind overrun"),
+        lzo::Error::OutputOverrun => OutputOverrunError::new_err("output overrun"),
+        lzo::Error::InputOverrun => InputOverrunError::new_err("input overrun"),
+        lzo::Error::Error => LzokayUnknownError::new_err("unknown error"),
+        lzo::Error::InputNotConsumed => InputNotConsumedError::new_err("input not consumed"),
     }
 }
 
@@ -27,22 +27,29 @@ fn lzokay_error_to_pyerr(error: lzokay::Error) -> PyErr {
 fn decompress(data: &[u8], buffer_size: usize) -> PyResult<Vec<u8>> {
     let mut dst = vec![0u8; buffer_size];
 
-    lzokay::decompress::decompress(data, &mut dst).map_err(lzokay_error_to_pyerr)?;
+    lzo::decompress::decompress(data, &mut dst).map_err(lzokay_error_to_pyerr)?;
 
     Ok(dst)
 }
 
-/// Formats the sum of two numbers as string.
+/// Compress data using LZO compression.
 #[pyfunction]
 fn compress(data: &[u8]) -> PyResult<Vec<u8>> {
-    let ret = lzokay::compress::compress(data).map_err(lzokay_error_to_pyerr)?;
+    let ret = lzo::compress::compress(data).map_err(lzokay_error_to_pyerr)?;
     Ok(ret)
 }
 
+/// Returns the worst-case size for LZO compression of data of given length.
+#[pyfunction]
+fn compress_worst_size(length: usize) -> PyResult<usize> {
+    Ok(lzo::compress::compress_worst_size(length))
+}
+
 #[pymodule]
-fn _lzokay(m: &Bound<'_, PyModule>) -> PyResult<()> {
-    m.add_function(wrap_pyfunction!(compress, m)?)?;
+fn lzokay(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(decompress, m)?)?;
+    m.add_function(wrap_pyfunction!(compress, m)?)?;
+    m.add_function(wrap_pyfunction!(compress_worst_size, m)?)?;
     
     // Add exception classes to the module
     m.add("LzokayError", m.py().get_type::<LzokayError>())?;

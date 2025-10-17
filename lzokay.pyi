@@ -1,8 +1,8 @@
-"""Type stubs for the native _lzokay module."""
+"""Type stubs for lzokay - Pure Rust LZO compression library."""
 
 # Exception hierarchy
 class LzokayError(Exception):
-    """Any kind of error."""
+    """Base exception for all lzokay errors."""
     ...
 
 class LookbehindOverrunError(LzokayError):
@@ -36,8 +36,8 @@ def compress(data: bytes) -> bytes:
         The compressed data as bytes
         
     Raises:
-        OutputOverrunError: If compression buffer is too small
-        LzokayUnknownError: For other compression errors
+        OutputOverrunError:
+        LzokayUnknownError:
     """
     ...
 
@@ -53,10 +53,14 @@ def decompress(data: bytes, buffer_size: int) -> bytes:
         The decompressed data as bytes
         
     Raises:
-        LookbehindOverrunError: If compressed data is invalid
-        OutputOverrunError: If output buffer is too small
-        InputOverrunError: If input buffer is invalid or truncated
-        InputNotConsumedError: If input has remaining data after decompression
-        LzokayUnknownError: For other decompression errors
+        LookbehindOverrunError:
+        OutputOverrunError:
+        InputOverrunError:
+        InputNotConsumedError:
+        LzokayUnknownError:
     """
+    ...
+
+def compress_worst_size(length: int) -> int:
+    """Returns the worst-case size for LZO compression of data of given length."""
     ...

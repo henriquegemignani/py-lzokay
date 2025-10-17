@@ -60,6 +60,7 @@ select = [
 ]
 
 [tool.maturin]
-python-source = "python"
-module-name = "lzokay._lzokay"
+# For pure Rust project - no python-source needed
 features = ["pyo3/extension-module"]
+# Include stub files in the package
+include = ["*.pyi", "py.typed"]
