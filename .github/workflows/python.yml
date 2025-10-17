@@ -40,6 +40,7 @@ jobs:
       CIBW_ARCHS_MACOS: universal2
       CIBW_ARCHS_WINDOWS: AMD64
       CIBW_SKIP: pp* *musllinux* cp*t-*
+      MACOSX_DEPLOYMENT_TARGET: '10.12'
 
   build-sdist:
     name: sdist
@@ -83,6 +84,7 @@ jobs:
         env:
           CIBW_TEST_EXTRAS: test
           CIBW_TEST_COMMAND: pytest {project}/tests
+          MACOSX_DEPLOYMENT_TARGET: '10.12'
           
       - name: codecov
         uses: codecov/codecov-action@v5
