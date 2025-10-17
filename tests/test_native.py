@@ -20,6 +20,7 @@ def test_compress_and_decompress(data):
 
     assert decompressed == data
 
+
 def test_output_overrun_decompress():
     compressed = lzokay.compress(b"Hello World")
 
@@ -30,6 +31,7 @@ def test_output_overrun_decompress():
 def test_input_overrun_decompress():
     with pytest.raises(lzokay.InputOverrunError):
         lzokay.decompress(b"", 1)
+
 
 def test_input_not_consumed_decompress():
     compressed = lzokay.compress(b"Hello World")
