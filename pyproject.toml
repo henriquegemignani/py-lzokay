@@ -60,7 +60,10 @@ select = [
 ]
 
 [tool.maturin]
-# For pure Rust project - no python-source needed
 features = ["pyo3/extension-module"]
-# Include stub files in the package
+
+# Include stub files in the package and declare typing support
 include = ["*.pyi", "py.typed"]
+
+# Configure abi3 target for Python 3.10+
+python-versions = ">=3.10"

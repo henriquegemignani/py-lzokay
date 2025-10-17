@@ -10,5 +10,5 @@ name = "lzokay"
 crate-type = ["cdylib"]
 
 [dependencies]
-pyo3 = { version = "0.26.0", features = ["abi3"] }
+pyo3 = { version = "0.26.0", features = ["abi3-py310"] }
 lzokay = "2.0.1"
