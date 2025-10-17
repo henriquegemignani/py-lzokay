@@ -27,9 +27,7 @@ jobs:
             {
               cibuildwheel --print-build-identifiers --platform linux \
               | jq -nRc '{"only": inputs, "os": "ubuntu-latest"}' \
-              && cibuildwheel --print-build-identifiers --platform macos --archs x86_64 \
-              | jq -nRc '{"only": inputs, "os": "macos-15-intel"}' \
-              && cibuildwheel --print-build-identifiers --platform macos --archs arm64 \
+              && cibuildwheel --print-build-identifiers --platform macos \
               | jq -nRc '{"only": inputs, "os": "macos-latest"}' \
               && cibuildwheel --print-build-identifiers --platform windows \
               | jq -nRc '{"only": inputs, "os": "windows-latest"}'
@@ -37,8 +35,9 @@ jobs:
           )
           echo "include=$MATRIX" >> $GITHUB_OUTPUT
     env:
+      CIBW_BUILD: 'cp310-*'
       CIBW_ARCHS_LINUX: x86_64
-      CIBW_ARCHS_MACOS: arm64 x86_64
+      CIBW_ARCHS_MACOS: universal2
       CIBW_ARCHS_WINDOWS: AMD64
       CIBW_SKIP: pp* *musllinux* cp*t-*
 
@@ -52,7 +51,7 @@ jobs:
           submodules: 'recursive'
 
       - name: Build sdist
-        run: pipx run build --sdist
+        run: uv build --sdist
 
       - name: Store the packages
         uses: actions/upload-artifact@v4
