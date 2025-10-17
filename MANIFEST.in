@@ -1,3 +1,0 @@
-include *.pyx
-include *.pxd
-recursive-include native *

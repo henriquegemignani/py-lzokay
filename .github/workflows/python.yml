@@ -27,9 +27,7 @@ jobs:
             {
               cibuildwheel --print-build-identifiers --platform linux \
               | jq -nRc '{"only": inputs, "os": "ubuntu-latest"}' \
-              && cibuildwheel --print-build-identifiers --platform macos --archs x86_64 \
-              | jq -nRc '{"only": inputs, "os": "macos-15-intel"}' \
-              && cibuildwheel --print-build-identifiers --platform macos --archs arm64 \
+              && cibuildwheel --print-build-identifiers --platform macos \
               | jq -nRc '{"only": inputs, "os": "macos-latest"}' \
               && cibuildwheel --print-build-identifiers --platform windows \
               | jq -nRc '{"only": inputs, "os": "windows-latest"}'
@@ -37,10 +35,12 @@ jobs:
           )
           echo "include=$MATRIX" >> $GITHUB_OUTPUT
     env:
+      CIBW_BUILD: 'cp310-*'
       CIBW_ARCHS_LINUX: x86_64
-      CIBW_ARCHS_MACOS: arm64 x86_64
+      CIBW_ARCHS_MACOS: universal2
       CIBW_ARCHS_WINDOWS: AMD64
-      CIBW_SKIP: pp* *musllinux*
+      CIBW_SKIP: pp* *musllinux* cp*t-*
+      MACOSX_DEPLOYMENT_TARGET: '10.12'
 
   build-sdist:
     name: sdist
@@ -73,6 +73,10 @@ jobs:
           fetch-depth: 0
           submodules: 'recursive'
   
+      - name: Add x86_64-apple-darwin
+        run: rustup target add x86_64-apple-darwin
+        if: matrix.os == 'macos-latest'
+
       - uses: pypa/cibuildwheel@v3.2.1
         with:
           only: ${{ matrix.only }}
@@ -80,6 +84,7 @@ jobs:
         env:
           CIBW_TEST_EXTRAS: test
           CIBW_TEST_COMMAND: pytest {project}/tests
+          MACOSX_DEPLOYMENT_TARGET: '10.12'
           
       - name: codecov
         uses: codecov/codecov-action@v5
