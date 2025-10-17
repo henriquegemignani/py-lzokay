@@ -1,4 +1,17 @@
-from lzokay._lzokay import compress, decompress, LzokayError, LookbehindOverrunError, OutputOverrunError, InputOverrunError, LzokayUnknownError, InputNotConsumedError
+"""
+Python bindings for LZO compression/decompression using the Rust lzokay library.
+"""
+
+from lzokay._lzokay import (
+    compress,
+    decompress,
+    LzokayError,
+    LookbehindOverrunError,
+    OutputOverrunError,
+    InputOverrunError,
+    LzokayUnknownError,
+    InputNotConsumedError,
+)
 
 
 def compress_worst_size(length: int) -> int:
