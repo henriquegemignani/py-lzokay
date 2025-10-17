@@ -3,7 +3,7 @@ requires = [
     "setuptools>=61.2",
     "Cython>=3.1",
     "setuptools_scm[toml]>=3.4",
-    "setuptools-cmake-helper>=0.1.1",
+    "setuptools-cmake-helper>=0.2.0",
 ]
 build-backend = "setuptools.build_meta"
 
@@ -12,8 +12,8 @@ build-backend = "setuptools.build_meta"
 name = "lzokay"
 description = "Python bindings for LZ👌, a LZO compression/decompression algorithm."
 authors = [{name = "Henrique Gemignani"}]
+license = "MIT"
 classifiers = [
-    "License :: OSI Approved :: MIT License",
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
     "Programming Language :: Python :: 3.9",
